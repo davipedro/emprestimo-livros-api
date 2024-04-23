@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import api.emakers.emprestimolivros.infra.exceptions.LivroNaoEncontradoException;
 import api.emakers.emprestimolivros.model.Livro;
 import api.emakers.emprestimolivros.repository.LivroRepository;
 
@@ -16,6 +17,11 @@ public class LivroService {
 
     public List<Livro> buscarTodosLivros() {
         return livroRepository.findAll();
+    }
+
+    public Livro buscarLivroPorId(Long id) {
+        return livroRepository.findById(id)
+        .orElseThrow(() -> new LivroNaoEncontradoException("Livro não pode ser encontrado"));
     }
     
 }
