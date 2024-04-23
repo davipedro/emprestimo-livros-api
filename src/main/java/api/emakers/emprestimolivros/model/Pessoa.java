@@ -1,5 +1,6 @@
 package api.emakers.emprestimolivros.model;
 
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,4 +22,7 @@ public class Pessoa {
     private Long id;
     private String nome;
     private int cep;
+    //injeta a classe endereco para que a tabela pessoa tenha as colunas de endereco
+    @Embedded
+    private Endereco endereco;
 }
