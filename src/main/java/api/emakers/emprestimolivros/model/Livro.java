@@ -35,9 +35,10 @@ public class Livro {
     private String nome;
     @Column(length = 45)
     private String autor;
-    private int quantidade;
+    private Integer quantidade;
     @Column(name = "data_lancamento")
     LocalDate dataLancamento;
+    private Boolean ativo;
     
     @ManyToMany
     @JoinTable(
