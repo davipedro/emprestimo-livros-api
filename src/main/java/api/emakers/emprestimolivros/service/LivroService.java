@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import api.emakers.emprestimolivros.Dto.PostLivro;
-import api.emakers.emprestimolivros.Dto.UpdateLivro;
+import api.emakers.emprestimolivros.Dto.livro.PostLivro;
+import api.emakers.emprestimolivros.Dto.livro.UpdateLivro;
 import api.emakers.emprestimolivros.infra.exceptions.LivroNaoEncontradoException;
 import api.emakers.emprestimolivros.model.Livro;
 import api.emakers.emprestimolivros.repository.LivroRepository;

@@ -10,7 +10,6 @@ import api.emakers.emprestimolivros.infra.exceptions.PessoaNaoEncontradaExceptio
 import api.emakers.emprestimolivros.model.Endereco;
 import api.emakers.emprestimolivros.model.Pessoa;
 import api.emakers.emprestimolivros.repository.PessoaRepository;
-import jakarta.validation.Valid;
 
 @Service
 public class PessoaService {
