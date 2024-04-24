@@ -24,7 +24,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Pessoa {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,4 +36,9 @@ public class Pessoa {
 
     @ManyToMany(mappedBy = "pessoas")
     private List<Livro> livros;
+
+    public Pessoa(String nome, Endereco endereco) {
+        this.nome = nome;
+        this.endereco = endereco;
+    }
 }
