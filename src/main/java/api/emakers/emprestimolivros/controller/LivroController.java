@@ -3,8 +3,8 @@ package api.emakers.emprestimolivros.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import api.emakers.emprestimolivros.Dto.PostLivro;
-import api.emakers.emprestimolivros.Dto.UpdateLivro;
+import api.emakers.emprestimolivros.Dto.livro.PostLivro;
+import api.emakers.emprestimolivros.Dto.livro.UpdateLivro;
 import api.emakers.emprestimolivros.model.Livro;
 import api.emakers.emprestimolivros.service.LivroService;
 import jakarta.validation.Valid;
