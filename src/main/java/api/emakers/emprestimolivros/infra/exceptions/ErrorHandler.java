@@ -11,4 +11,9 @@ public class ErrorHandler {
     public ResponseEntity<Object> livroNaoEncontrado(LivroNaoEncontradoException ex){
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
+
+    @ExceptionHandler(PessoaNaoEncontradaException.class)
+    public ResponseEntity<Object> pessoaNaoEncontrada(PessoaNaoEncontradaException ex){
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
 }
