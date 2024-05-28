@@ -1,4 +1,4 @@
-package api.emakers.emprestimolivros.Dto.pessoa;
+package api.emakers.emprestimolivros.dto.pessoa;
 
 import api.emakers.emprestimolivros.model.Endereco;
 import jakarta.validation.constraints.NotBlank;

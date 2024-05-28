@@ -3,9 +3,11 @@ package api.emakers.emprestimolivros.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import api.emakers.emprestimolivros.Dto.pessoa.PostPessoa;
-import api.emakers.emprestimolivros.Dto.pessoa.UpdatePessoa;
-import api.emakers.emprestimolivros.model.Livro;
+import api.emakers.emprestimolivros.dto.pessoa.LivroPessoaResponse;
+import api.emakers.emprestimolivros.dto.pessoa.PessoaPorIdReponse;
+import api.emakers.emprestimolivros.dto.pessoa.PessoaResponse;
+import api.emakers.emprestimolivros.dto.pessoa.PostPessoa;
+import api.emakers.emprestimolivros.dto.pessoa.UpdatePessoa;
 import api.emakers.emprestimolivros.model.Pessoa;
 import api.emakers.emprestimolivros.service.LivroService;
 import api.emakers.emprestimolivros.service.PessoaService;
@@ -37,17 +39,17 @@ public class PessoaController {
     @Autowired
     
     @GetMapping
-    public ResponseEntity<List<Pessoa>> buscarTodasPessoas() {
+    public ResponseEntity<List<PessoaResponse>> buscarTodasPessoas() {
 
-        List<Pessoa> pessoas = pessoaService.buscarTodasPessoas();
+        List<PessoaResponse> pessoas = pessoaService.buscarTodasPessoas();
 
         return ResponseEntity.ok().body(pessoas);
     }
     
     @GetMapping("/pessoa/{id}")
-    public ResponseEntity<Pessoa> buscarPessoaPorId(@PathVariable Long id) {
+    public ResponseEntity<PessoaPorIdReponse> buscarPessoaPorId(@PathVariable Long id) {
         
-        Pessoa pessoa = pessoaService.buscarPessoaPorId(id);
+        PessoaPorIdReponse pessoa = pessoaService.buscarPessoaPorId(id);
 
         return ResponseEntity.ok().body(pessoa);
     }
@@ -86,7 +88,7 @@ public class PessoaController {
     }
 
     @GetMapping("/pessoa/{id}/livros")
-    public ResponseEntity<List<Livro>> buscarLivrosPessoa(@PathVariable Long id) {
+    public ResponseEntity<List<LivroPessoaResponse>> buscarLivrosPessoa(@PathVariable Long id) {
         
         var livros = pessoaService.buscarLivrosPessoa(id);
         

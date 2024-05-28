@@ -3,8 +3,9 @@ package api.emakers.emprestimolivros.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import api.emakers.emprestimolivros.Dto.livro.PostLivro;
-import api.emakers.emprestimolivros.Dto.livro.UpdateLivro;
+import api.emakers.emprestimolivros.dto.livro.LivroResponse;
+import api.emakers.emprestimolivros.dto.livro.PostLivro;
+import api.emakers.emprestimolivros.dto.livro.UpdateLivro;
 import api.emakers.emprestimolivros.model.Livro;
 import api.emakers.emprestimolivros.service.LivroService;
 import jakarta.validation.Valid;
@@ -29,8 +30,8 @@ public class LivroController {
     private LivroService livroService;
     
     @GetMapping
-    public ResponseEntity<List<Livro>> buscarTodosLivros() {
-        List<Livro> livros = livroService.buscarTodosLivros();
+    public ResponseEntity<List<LivroResponse>> buscarTodosLivros() {
+        List<LivroResponse> livros = livroService.buscarTodosLivros();
         
         return ResponseEntity.ok().body(livros);
     }
@@ -49,8 +50,8 @@ public class LivroController {
     }
 
     @PutMapping("/livro/{id}")
-    public ResponseEntity<Livro> atualizarLivro(@PathVariable Long id, @RequestBody UpdateLivro dados) {
-        var livroAtualizado = livroService.atualizarLivro(id, dados);
+    public ResponseEntity<LivroResponse> atualizarLivro(@PathVariable Long id, @RequestBody UpdateLivro dados) {
+        LivroResponse livroAtualizado = livroService.atualizarLivro(id, dados);
         
         return ResponseEntity.ok().body(livroAtualizado);
     }

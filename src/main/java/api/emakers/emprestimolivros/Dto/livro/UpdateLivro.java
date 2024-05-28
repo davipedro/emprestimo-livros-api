@@ -1,4 +1,4 @@
-package api.emakers.emprestimolivros.Dto.livro;
+package api.emakers.emprestimolivros.dto.livro;
 
 import java.time.LocalDate;
 

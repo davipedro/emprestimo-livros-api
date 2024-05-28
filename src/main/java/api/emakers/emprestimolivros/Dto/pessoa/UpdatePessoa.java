@@ -1,4 +1,4 @@
-package api.emakers.emprestimolivros.Dto.pessoa;
+package api.emakers.emprestimolivros.dto.pessoa;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
