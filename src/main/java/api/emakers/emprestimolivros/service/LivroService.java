@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import api.emakers.emprestimolivros.dto.livro.LivroResponse;
 import api.emakers.emprestimolivros.dto.livro.PostLivro;
 import api.emakers.emprestimolivros.dto.livro.UpdateLivro;
+import api.emakers.emprestimolivros.dto.pessoa.LivroPessoaResponse;
 import api.emakers.emprestimolivros.infra.exceptions.LivroNaoEncontradoException;
 import api.emakers.emprestimolivros.infra.exceptions.PessoaNaoEncontradaException;
 import api.emakers.emprestimolivros.infra.validacoes.LivroValidador;
@@ -94,12 +95,38 @@ public class LivroService {
 
         livro.setQuantidadeDisponivel(livro.getQuantidadeDisponivel() - 1);
         pessoa.getLivros().add(livro);
-
-        pessoa.getLivros().forEach(l -> System.out.println("Livro:" +  l.getNome()));
-
-        pessoa.getLivros().add(livro);
     
         livro.getPessoas().add(pessoa);
+
+        pessoaRepository.save(pessoa);
+    }
+
+    public List<LivroPessoaResponse> buscarLivrosPorPessoa(Long id) {
+        List<Livro> livros = livroRepository.findLivrosByPessoaId(id)
+        .orElseThrow(() -> new PessoaNaoEncontradaException("Pessoa não encontrada"));
+
+        return livros.stream().map(livro -> new LivroPessoaResponse(
+            livro.getId(),
+            livro.getNome(),
+            livro.getAutor(),
+            livro.getDataLancamento()
+        )).toList();
+    }
+
+    public void devolucaoLivro(Long pessoaId, Long livroId) {
+        Livro livro = livroRepository.findById(livroId)
+        .orElseThrow(() -> new LivroNaoEncontradoException("O livro não pode ser encontrado"));
+        Pessoa pessoa = pessoaRepository.findById(pessoaId)
+        .orElseThrow(() -> new PessoaNaoEncontradaException("A pessoa não pode ser encontrada"));
+
+        livro.setQuantidadeDisponivel(livro.getQuantidadeDisponivel() + 1);
+        
+        pessoaRepository.findLivroByPessoaId(pessoaId, livroId).orElseThrow(
+            () -> new LivroNaoEncontradoException
+            ("O livro não pode ser encontrado para devolução: pessoa de id " + pessoaId + " não possui o livro de id " + livroId + " emprestado"));
+        pessoa.getLivros().remove(livro);
+
+        livro.getPessoas().remove(pessoa);
 
         pessoaRepository.save(pessoa);
     }

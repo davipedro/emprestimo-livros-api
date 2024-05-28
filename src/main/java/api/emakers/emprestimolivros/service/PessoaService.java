@@ -1,8 +1,6 @@
 package api.emakers.emprestimolivros.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +11,6 @@ import api.emakers.emprestimolivros.dto.pessoa.PostPessoa;
 import api.emakers.emprestimolivros.dto.pessoa.UpdatePessoa;
 import api.emakers.emprestimolivros.infra.exceptions.PessoaNaoEncontradaException;
 import api.emakers.emprestimolivros.model.Endereco;
-import api.emakers.emprestimolivros.model.Livro;
 import api.emakers.emprestimolivros.model.Pessoa;
 import api.emakers.emprestimolivros.repository.PessoaRepository;
 
@@ -94,18 +91,5 @@ public class PessoaService {
 
         pessoaRepository.delete(pessoa);
     }
-
-    public List<LivroPessoaResponse> buscarLivrosPessoa(Long id) {
-        List<Livro> livros = pessoaRepository.findLivrosByPessoaId(id)
-        .orElseThrow(() -> new PessoaNaoEncontradaException("Pessoa não encontrada"));
-
-        return livros.stream().map(livro -> new LivroPessoaResponse(
-            livro.getId(),
-            livro.getNome(),
-            livro.getAutor(),
-            livro.getDataLancamento()
-        )).toList();
-    }
-
     
 }
