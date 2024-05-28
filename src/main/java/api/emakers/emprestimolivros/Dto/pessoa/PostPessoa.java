@@ -1,22 +1,12 @@
 package api.emakers.emprestimolivros.Dto.pessoa;
 
+import api.emakers.emprestimolivros.model.Endereco;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record PostPessoa(
     @NotBlank
     String nome,
-    @NotBlank 
-    String logradouro,
-    @NotBlank
-    String bairro,
-    @NotBlank
-    String cep,
-    @NotBlank
-    String numero,
-    String complemento,
-    @NotBlank
-    String cidade,
-    @NotBlank
-    String uf) {
-    
+    @NotNull 
+    Endereco endereco) {
 }
