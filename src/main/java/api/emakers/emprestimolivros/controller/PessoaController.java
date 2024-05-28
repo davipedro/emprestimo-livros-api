@@ -90,9 +90,17 @@ public class PessoaController {
     @GetMapping("/pessoa/{id}/livros")
     public ResponseEntity<List<LivroPessoaResponse>> buscarLivrosPessoa(@PathVariable Long id) {
         
-        var livros = pessoaService.buscarLivrosPessoa(id);
+        var livros = livroService.buscarLivrosPorPessoa(id);
         
         return ResponseEntity.ok().body(livros);
     }
     
+    @Transactional
+    @PutMapping("/pessoa/{pessoaId}/devolucao/{livroId}")
+    public ResponseEntity<Object> devolverLivro(@PathVariable Long pessoaId, @PathVariable Long livroId) {
+        
+        livroService.devolucaoLivro(pessoaId, livroId);
+        
+        return ResponseEntity.noContent().build();
+    }
 }
