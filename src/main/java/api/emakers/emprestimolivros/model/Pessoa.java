@@ -2,9 +2,12 @@ package api.emakers.emprestimolivros.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,7 +37,8 @@ public class Pessoa {
     @Embedded
     private Endereco endereco;
 
-    @ManyToMany(mappedBy = "pessoas")
+    @ManyToMany(mappedBy = "pessoas", fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<Livro> livros;
 
     public Pessoa(String nome, Endereco endereco) {
