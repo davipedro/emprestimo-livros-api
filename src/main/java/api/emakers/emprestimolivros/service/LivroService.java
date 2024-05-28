@@ -5,8 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import api.emakers.emprestimolivros.Dto.livro.PostLivro;
-import api.emakers.emprestimolivros.Dto.livro.UpdateLivro;
+import api.emakers.emprestimolivros.dto.livro.LivroResponse;
+import api.emakers.emprestimolivros.dto.livro.PostLivro;
+import api.emakers.emprestimolivros.dto.livro.UpdateLivro;
 import api.emakers.emprestimolivros.infra.exceptions.LivroNaoEncontradoException;
 import api.emakers.emprestimolivros.infra.exceptions.PessoaNaoEncontradaException;
 import api.emakers.emprestimolivros.infra.validacoes.LivroValidador;
@@ -27,8 +28,17 @@ public class LivroService {
     @Autowired
     private PessoaRepository pessoaRepository;
 
-    public List<Livro> buscarTodosLivros() {
-        return livroRepository.findAll();
+    public List<LivroResponse> buscarTodosLivros() {
+        List<Livro> livrosBuscados = livroRepository.findAll();
+
+        //retorna o mapeamento de livros para livroResponse
+        return livrosBuscados.stream().map(livro -> new LivroResponse(
+            livro.getId(),
+            livro.getNome(),
+            livro.getAutor(),
+            livro.getDataLancamento(),
+            livro.getQuantidadeDisponivel()
+        )).toList();
     }
 
     public Livro buscarLivroPorId(Long id) {
@@ -41,7 +51,7 @@ public class LivroService {
             data.nome(),
             data.autor(),
             data.data(),
-            data.quantidade()
+            data.quantidadeDisponivel()
         );
 
         livroRepository.save(livro);
@@ -54,18 +64,24 @@ public class LivroService {
         livroRepository.delete(livro);
     }
 
-    public Livro atualizarLivro(Long id, UpdateLivro dados) {
+    public LivroResponse atualizarLivro(Long id, UpdateLivro dados) {
         var livro = livroRepository.findById(id)
         .orElseThrow(() -> new LivroNaoEncontradoException("O livro não foi encontrado para deleção"));
     
         if (dados.nome() != null) livro.setNome(dados.nome());
         if (dados.autor() != null) livro.setAutor(dados.autor());
         if (dados.data() != null) livro.setDataLancamento(dados.data());
-        if (dados.quantidade() != null) livro.setQuantidade(dados.quantidade());
+        if (dados.quantidade() != null) livro.setQuantidadeDisponivel(dados.quantidade());
 
         var livroAtualizado = livroRepository.save(livro);
 
-        return livroAtualizado;
+        return new LivroResponse(
+            livroAtualizado.getId(),
+            livroAtualizado.getNome(),
+            livroAtualizado.getAutor(),
+            livroAtualizado.getDataLancamento(),
+            livroAtualizado.getQuantidadeDisponivel()
+        );
     }
 
     public void emprestimoLivro(Long pessoaId, Long livroId) {
@@ -76,11 +92,16 @@ public class LivroService {
 
         livroValidadores.forEach(v -> v.validar(livro));
 
-        livro.setQuantidade(livro.getQuantidade() - 1);
+        livro.setQuantidadeDisponivel(livro.getQuantidadeDisponivel() - 1);
         pessoa.getLivros().add(livro);
 
+        pessoa.getLivros().forEach(l -> System.out.println("Livro:" +  l.getNome()));
+
+        pessoa.getLivros().add(livro);
+    
+        livro.getPessoas().add(pessoa);
+
         pessoaRepository.save(pessoa);
-        livroRepository.save(livro);
     }
     
 }

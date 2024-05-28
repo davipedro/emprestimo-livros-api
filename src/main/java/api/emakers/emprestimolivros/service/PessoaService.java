@@ -1,12 +1,16 @@
 package api.emakers.emprestimolivros.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import api.emakers.emprestimolivros.Dto.pessoa.PostPessoa;
-import api.emakers.emprestimolivros.Dto.pessoa.UpdatePessoa;
+import api.emakers.emprestimolivros.dto.pessoa.LivroPessoaResponse;
+import api.emakers.emprestimolivros.dto.pessoa.PessoaPorIdReponse;
+import api.emakers.emprestimolivros.dto.pessoa.PessoaResponse;
+import api.emakers.emprestimolivros.dto.pessoa.PostPessoa;
+import api.emakers.emprestimolivros.dto.pessoa.UpdatePessoa;
 import api.emakers.emprestimolivros.infra.exceptions.PessoaNaoEncontradaException;
 import api.emakers.emprestimolivros.model.Endereco;
 import api.emakers.emprestimolivros.model.Livro;
@@ -19,13 +23,33 @@ public class PessoaService {
     @Autowired
     private PessoaRepository pessoaRepository;
 
-    public List<Pessoa> buscarTodasPessoas() {
-        return pessoaRepository.findAll();
+    public List<PessoaResponse> buscarTodasPessoas() {
+        List<Pessoa> pessoas = pessoaRepository.findAll();
+
+        return pessoas.stream().map(pessoa -> new PessoaResponse(
+            pessoa.getId(),
+            pessoa.getNome(),
+            pessoa.getEndereco()
+        )).toList();
     }
 
-    public Pessoa buscarPessoaPorId(Long id) {
-        return pessoaRepository.findById(id)
+    public PessoaPorIdReponse buscarPessoaPorId(Long id) {
+        var Pessoa = pessoaRepository.findById(id)
         .orElseThrow(() -> new PessoaNaoEncontradaException("Pessoa não encontrada"));
+
+        List<LivroPessoaResponse> livros = Pessoa.getLivros().stream().map(livro -> new LivroPessoaResponse(
+            livro.getId(),
+            livro.getNome(),
+            livro.getAutor(),
+            livro.getDataLancamento()
+        )).toList();
+
+        return new PessoaPorIdReponse(
+            Pessoa.getId(),
+            Pessoa.getNome(),
+            Pessoa.getEndereco(),
+            livros
+        );
     }
 
     public void cadastrarPessoa(PostPessoa dado) {
@@ -71,11 +95,16 @@ public class PessoaService {
         pessoaRepository.delete(pessoa);
     }
 
-    public List<Livro> buscarLivrosPessoa(Long id) {
+    public List<LivroPessoaResponse> buscarLivrosPessoa(Long id) {
         List<Livro> livros = pessoaRepository.findLivrosByPessoaId(id)
         .orElseThrow(() -> new PessoaNaoEncontradaException("Pessoa não encontrada"));
 
-        return livros;
+        return livros.stream().map(livro -> new LivroPessoaResponse(
+            livro.getId(),
+            livro.getNome(),
+            livro.getAutor(),
+            livro.getDataLancamento()
+        )).toList();
     }
 
     
