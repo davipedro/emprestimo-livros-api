@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import api.emakers.emprestimolivros.model.Livro;
 import api.emakers.emprestimolivros.model.Pessoa;
 
 public interface PessoaRepository extends JpaRepository<Pessoa, Long>{
@@ -16,6 +15,6 @@ public interface PessoaRepository extends JpaRepository<Pessoa, Long>{
     @EntityGraph(attributePaths = "livros")
     List<Pessoa> findAll();
 
-    @Query("SELECT l FROM Pessoa p JOIN p.livros l WHERE p.id = :pessoaId")
-    Optional<List<Livro>> findLivrosByPessoaId(@Param("pessoaId") Long pessoaId);
+    @Query("SELECT l FROM Livro l JOIN l.pessoas p WHERE p.id = :pessoaId AND l.id = :livroId")
+    Optional<Pessoa> findLivroByPessoaId(@Param("pessoaId") Long pessoaId, @Param("livroId") Long livroId);
 }
