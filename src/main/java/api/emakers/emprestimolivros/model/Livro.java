@@ -17,6 +17,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "livros")
@@ -25,6 +26,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
+@ToString
 public class Livro {
     
     
@@ -38,11 +40,10 @@ public class Livro {
     private Integer quantidade;
     @Column(name = "data_lancamento")
     LocalDate dataLancamento;
-    private Boolean ativo;
     
     @ManyToMany
     @JoinTable(
-        name = "Livro_Pessoa",
+        name = "emprestimo",
         joinColumns = 
         @JoinColumn(name = "livro_id"),
         inverseJoinColumns = @JoinColumn(name = "pessoa_id")
@@ -55,5 +56,5 @@ public class Livro {
         this.dataLancamento = data;
         this.quantidade = quantidade;
     }
-        
+   
 }
