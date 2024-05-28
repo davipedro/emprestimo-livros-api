@@ -56,8 +56,8 @@ public class LivroController {
     }
     
     @DeleteMapping("/livro/{id}")
-    public ResponseEntity<Object> excluirLogicamente(@PathVariable Long id){
-        livroService.delecaoLogica(id);
+    public ResponseEntity<Object> excluir(@PathVariable Long id){
+        livroService.deletarLivro(id);
         return ResponseEntity.noContent().build();
     }
     
