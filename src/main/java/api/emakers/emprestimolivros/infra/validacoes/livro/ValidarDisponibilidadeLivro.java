@@ -10,7 +10,7 @@ import api.emakers.emprestimolivros.model.Livro;
 public class ValidarDisponibilidadeLivro implements LivroValidador{
     @Override
     public void validar(Livro livro) {
-        if(livro.getQuantidade() == 0) {
+        if(livro.getQuantidadeDisponivel() == 0) {
             throw new LivroIndisponivelException("Todos os livros já foram emprestados");
         }
     }
