@@ -6,6 +6,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ErrorHandler {
+
+    @ExceptionHandler(LivroIndisponivelException.class)
+    public ResponseEntity<Object> livroIndisponivel(LivroIndisponivelException ex){
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
     
     @ExceptionHandler(LivroNaoEncontradoException.class)
     public ResponseEntity<Object> livroNaoEncontrado(LivroNaoEncontradoException ex){
