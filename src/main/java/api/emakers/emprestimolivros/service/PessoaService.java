@@ -9,6 +9,7 @@ import api.emakers.emprestimolivros.Dto.pessoa.PostPessoa;
 import api.emakers.emprestimolivros.Dto.pessoa.UpdatePessoa;
 import api.emakers.emprestimolivros.infra.exceptions.PessoaNaoEncontradaException;
 import api.emakers.emprestimolivros.model.Endereco;
+import api.emakers.emprestimolivros.model.Livro;
 import api.emakers.emprestimolivros.model.Pessoa;
 import api.emakers.emprestimolivros.repository.PessoaRepository;
 
@@ -30,13 +31,13 @@ public class PessoaService {
     public void cadastrarPessoa(PostPessoa dado) {
 
         var endereco = new Endereco(
-            dado.logradouro(),
-            dado.bairro(),
-            dado.cep(),
-            dado.numero(),
-            dado.complemento(),
-            dado.cidade(),
-            dado.uf()
+            dado.endereco().getLogradouro(),
+            dado.endereco().getBairro(),
+            dado.endereco().getCep(),
+            dado.endereco().getNumero(),
+            dado.endereco().getComplemento(),
+            dado.endereco().getCidade(),
+            dado.endereco().getUf()
         );
 
         Pessoa pessoa = new Pessoa(
@@ -69,5 +70,13 @@ public class PessoaService {
 
         pessoaRepository.delete(pessoa);
     }
+
+    public List<Livro> buscarLivrosPessoa(Long id) {
+        List<Livro> livros = pessoaRepository.findLivrosByPessoaId(id)
+        .orElseThrow(() -> new PessoaNaoEncontradaException("Pessoa não encontrada"));
+
+        return livros;
+    }
+
     
 }
