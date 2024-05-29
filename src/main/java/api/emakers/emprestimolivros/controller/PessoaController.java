@@ -11,6 +11,8 @@ import api.emakers.emprestimolivros.dto.pessoa.UpdatePessoa;
 import api.emakers.emprestimolivros.model.Pessoa;
 import api.emakers.emprestimolivros.service.LivroService;
 import api.emakers.emprestimolivros.service.PessoaService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/pessoas")
+@Tag(name = "Pessoas", description = "End-points relacionado a pessoas que permite cadastrar, buscar, atualizar e excluir pessoas, além de emprestimo e devolução de livros")
 public class PessoaController {
 
     @Autowired
@@ -36,9 +39,17 @@ public class PessoaController {
     @Autowired
     private LivroService livroService;
 
-    @Autowired
+    @PostMapping("/pessoa")
+    @Operation(summary = "Cadastrar uma nova pessoa")
+    public ResponseEntity<Pessoa> cadastrarPessoa(@RequestBody @Valid PostPessoa dado) {
+        
+        pessoaService.cadastrarPessoa(dado);
+
+        return ResponseEntity.noContent().build();
+    }
     
     @GetMapping
+    @Operation(summary = "Buscar todas as pessoas")
     public ResponseEntity<List<PessoaResponse>> buscarTodasPessoas() {
 
         List<PessoaResponse> pessoas = pessoaService.buscarTodasPessoas();
@@ -47,47 +58,16 @@ public class PessoaController {
     }
     
     @GetMapping("/pessoa/{id}")
+    @Operation(summary = "Buscar pessoa por ID")
     public ResponseEntity<PessoaPorIdReponse> buscarPessoaPorId(@PathVariable Long id) {
         
         PessoaPorIdReponse pessoa = pessoaService.buscarPessoaPorId(id);
 
         return ResponseEntity.ok().body(pessoa);
     }
-    
-    @PostMapping("/pessoa")
-    public ResponseEntity<Pessoa> cadastrarPessoa(@RequestBody @Valid PostPessoa dado) {
-        
-        pessoaService.cadastrarPessoa(dado);
-
-        return ResponseEntity.noContent().build();
-    }
-    
-    @PutMapping("/pessoa/{id}")
-    public ResponseEntity<Object> atualizarPessoa(@PathVariable Long id, @RequestBody UpdatePessoa dado) {
-        
-        pessoaService.atualizarPessoa(id, dado);
-        
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("/pessoa/{id}")
-    public ResponseEntity<Object> deletarPessoa(@PathVariable Long id) {
-        
-        pessoaService.deletarPessoa(id);
-        
-        return ResponseEntity.noContent().build();
-    }
-
-    @Transactional
-    @PutMapping("/pessoa/{pessoaId}/emprestimo/{livroId}")
-    public ResponseEntity<Object> pegarLivroEmprestado(@PathVariable Long pessoaId, @PathVariable Long livroId) {
-        
-        livroService.emprestimoLivro(pessoaId, livroId);
-        
-        return ResponseEntity.noContent().build();
-    }
 
     @GetMapping("/pessoa/{id}/livros")
+    @Operation(summary = "Buscar livros de uma pessoa por ID")
     public ResponseEntity<List<LivroPessoaResponse>> buscarLivrosPessoa(@PathVariable Long id) {
         
         var livros = livroService.buscarLivrosPorPessoa(id);
@@ -95,11 +75,40 @@ public class PessoaController {
         return ResponseEntity.ok().body(livros);
     }
     
+    @PutMapping("/pessoa/{id}")
+    @Operation(summary = "Atualizar dados de uma pessoa")
+    public ResponseEntity<Object> atualizarPessoa(@PathVariable Long id, @RequestBody UpdatePessoa dado) {
+        
+        pessoaService.atualizarPessoa(id, dado);
+        
+        return ResponseEntity.noContent().build();
+    }
+
+    @Transactional
+    @PutMapping("/pessoa/{pessoaId}/emprestimo/{livroId}")
+    @Operation(summary = "Fazer emprestimo de um livro")
+    public ResponseEntity<Object> pegarLivroEmprestado(@PathVariable Long pessoaId, @PathVariable Long livroId) {
+        
+        livroService.emprestimoLivro(pessoaId, livroId);
+        
+        return ResponseEntity.noContent().build();
+    }
+
     @Transactional
     @PutMapping("/pessoa/{pessoaId}/devolucao/{livroId}")
+    @Operation(summary = "Fazer devolução de um livro")
     public ResponseEntity<Object> devolverLivro(@PathVariable Long pessoaId, @PathVariable Long livroId) {
         
         livroService.devolucaoLivro(pessoaId, livroId);
+        
+        return ResponseEntity.noContent().build();
+    }
+    
+    @DeleteMapping("/pessoa/{id}")
+    @Operation(summary = "Excluir uma pessoa")
+    public ResponseEntity<Object> deletarPessoa(@PathVariable Long id) {
+        
+        pessoaService.deletarPessoa(id);
         
         return ResponseEntity.noContent().build();
     }
