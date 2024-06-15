@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>api.emakers.emprestimo-livros</groupId>
 	<artifactId>emprestimo-livros-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>emprestimo-livros-api</name>
 	<description>API-Rest de emprestimo de livros - treinee emakers</description>
 	<properties>
